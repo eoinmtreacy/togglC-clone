@@ -21,9 +21,15 @@ void getTask(void);
 int main()
 {
     const char *directory = "./tasks";
-    readTasks(directory, taskArray);
-    writeTasksToFiles(directory, taskArray);
-    getTask();
+    while (1)
+    {
+        readTasks(directory, taskArray);
+        getTask();
+        writeTasksToFiles(directory, taskArray);
+    }
+    
+    
+    
     return 0;
 }
 
@@ -86,7 +92,7 @@ int main()
 }
 
 void writeTasksToFiles(const char* directory, struct Task array[]) {
-    for (int i = 0; i < sizeof(taskArray)/sizeof(taskArray[0]); i++) {
+    for (int i = 0; i < taskCount; i++) {
         char filename[3]; // Adjust the size as needed
         snprintf(filename, sizeof(filename), "%s%d.txt", directory, i);
 
@@ -110,16 +116,14 @@ void writeTasksToFiles(const char* directory, struct Task array[]) {
 
 void getTask(void)
 {
-    while (1)
-    {
     char input[100]; // Assuming a maximum input length of 99 characters
     printf("enter letters to create new tasks, single numbers to activate existing, or exit:\n");
     fgets(input, sizeof(input), stdin); // Read a line of text from the user
 
-    if (strcmp(input, "q") == 0) {
-            break; // Exit the loop if the user types 'exit'
-        }
-
+    //if (strcmp(input, "q") == 0) {
+    //        break; // Exit the loop if the user types 'exit'
+    //    }
+//
     struct Task newTask;
     strncpy(newTask.user_input, input, sizeof(newTask.user_input) - 1);
     newTask.user_input[sizeof(newTask.user_input) - 1] = '\0'; // Ensure null-terminated string
@@ -128,10 +132,6 @@ void getTask(void)
 
     // Append the new task to the taskArray
     taskArray[taskCount] = newTask;
+    printf("%i %s", newTask.time, newTask.active ? "true/n" : "false/n");
     taskCount++;
-
-
-    printf("You entered: %s", input); // Print the input string
-    }
-
 }
