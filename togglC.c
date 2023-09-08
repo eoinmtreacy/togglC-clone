@@ -30,81 +30,76 @@ int main()
     return 0;
 }
 
-    void readTasks(const char* directory, struct Task array[])
-    {
-    taskCount = 0;
-    DIR *d;
-    struct dirent *dir;
-    d = opendir(directory);
-
-    if (d) {
-        while ((dir = readdir(d)) != NULL) {
-            // Check if the file has a .txt extension
-            if (strstr(dir->d_name, ".txt") != NULL) {
-                // Construct the full path to the file
-                char filepath[256]; // Adjust the size as needed
-                snprintf(filepath, sizeof(filepath), "%s/%s", directory, dir->d_name);
-
-                // Open the file for reading
-                FILE *file = fopen(filepath, "r");
-                if (file != NULL) {
-                    struct Task task;
-
-                    // Read task description (first line)
-                    if (fgets(task.user_input, sizeof(task.user_input), file) != NULL) {
-                        // Remove the newline character from the input
-                        if (task.user_input[strlen(task.user_input) - 1] == '\n') {
-                            task.user_input[strlen(task.user_input) - 1] = '\0';
-                        }
-
-                        // Read time (second line)
-                        char timeStr[100];
-                        if (fgets(timeStr, sizeof(timeStr), file) != NULL) {
-                            task.time = atoi(timeStr);
-
-                            // Read active status (third line)
-                            char activeStr[100];
-                            if (fgets(activeStr, sizeof(activeStr), file) != NULL) {
-                                task.active = (strcmp(activeStr, "true\n") == 0) ? true : false;
-
-                                taskArray[taskCount] = task;
-                                printf("%i: ", taskCount);
-                                printf("%s, ", task.user_input);
-                                printf("%d, ", task.time);
-                                printf("%s\n", task.active ? "active" : "inactive");
-                                taskCount++;
-                            }
+void readTasks(const char* directory, struct Task array[])
+{
+taskCount = 0;
+DIR *d;
+struct dirent *dir;
+d = opendir(directory);
+if (d) {
+    while ((dir = readdir(d)) != NULL) {
+        // Check if the file has a .txt extension
+        if (strstr(dir->d_name, ".txt") != NULL) 
+        {
+            // Construct the full path to the file
+            char filepath[256]; // Adjust the size as needed
+            snprintf(filepath, sizeof(filepath), "%s/%s", directory, dir->d_name);
+            // Open the file for reading
+            FILE *file = fopen(filepath, "r");
+            if (file != NULL) 
+            {
+                struct Task task;
+                // Read task description (first line)
+                if (fgets(task.user_input, sizeof(task.user_input), file) != NULL) 
+                {
+                    // Remove the newline character from the input
+                    if (task.user_input[strlen(task.user_input) - 1] == '\n') 
+                    {
+                        task.user_input[strlen(task.user_input) - 1] = '\0';
+                    }
+                    // Read time (second line)
+                    char timeStr[100];
+                    if (fgets(timeStr, sizeof(timeStr), file) != NULL) 
+                    {
+                        task.time = atoi(timeStr);
+                        // Read active status (third line)
+                        char activeStr[100];
+                        if (fgets(activeStr, sizeof(activeStr), file) != NULL) 
+                        {
+                            task.active = (strcmp(activeStr, "true\n") == 0) ? true : false;
+                            taskArray[taskCount] = task;
+                            printf("%i: ", taskCount);
+                            printf("%s, ", task.user_input);
+                            printf("%d, ", task.time);
+                            printf("%s\n", task.active ? "active" : "inactive");
+                            taskCount++;
                         }
                     }
-
-                    // Close the file
-                    fclose(file);
                 }
+                // Close the file
+                fclose(file);
             }
         }
-        closedir(d);
+    }
+    closedir(d);
     }
 }
 
 void writeTasksToFiles(const char* directory, struct Task array[]) 
 {
-    for (int i = 0; i < taskCount; i++) {
-        char filename[20]; // Adjust the size as needed
+    for (int i = 0; i < taskCount; i++) 
+    {
+        char filename[20];
         snprintf(filename, sizeof(filename), "%s/%d.txt", directory, i);
 
-        // Open the file for writing
         FILE *file = fopen(filename, "w");
-        if (file != NULL) {
-            // Write task description (first line)
+        if (file != NULL) 
+        {
+
             fprintf(file, "%s\n", taskArray[i].user_input);
-
-            // Write time (second line)
             fprintf(file, "%d\n", taskArray[i].time);
-
-            // Write active status (third line)
             fprintf(file, "%s\n", taskArray[i].active ? "true" : "false");
 
-            // Close the file
             fclose(file);
         }
     }
@@ -112,17 +107,23 @@ void writeTasksToFiles(const char* directory, struct Task array[])
 
 void getTask(void)
 {
-    char input[100]; // Assuming a maximum input length of 99 characters
+    char input[100];
     printf("enter letters to create new tasks, single numbers to activate existing, or exit:\n");
-    fgets(input, sizeof(input), stdin); // Read a line of text from the user
+    fgets(input, sizeof(input), stdin);
 
-    struct Task newTask;
-    strncpy(newTask.user_input, input, sizeof(newTask.user_input) - 1);
-    newTask.user_input[sizeof(newTask.user_input) - 1] = '\0'; // Ensure null-terminated string
-    newTask.time = 0;
-    newTask.active = false;
+    //handle single letter commands for delete, refresh, activate and edit
+    if ((input[1]) == '\n')
+    {
+        printf("single char detected\n");
+    } else
+        {
+            struct Task newTask;
+            strncpy(newTask.user_input, input, sizeof(newTask.user_input) - 1);
+            newTask.user_input[sizeof(newTask.user_input) - 1] = '\0';
+            newTask.time = 0;
+            newTask.active = false;
 
-    // Append the new task to the taskArray
-    taskArray[taskCount] = newTask;
-    taskCount++;
+            taskArray[taskCount] = newTask;
+            taskCount++;
+        }
 }
