@@ -93,8 +93,9 @@ int main()
 
 void writeTasksToFiles(const char* directory, struct Task array[]) {
     for (int i = 0; i < taskCount; i++) {
-        char filename[3]; // Adjust the size as needed
-        snprintf(filename, sizeof(filename), "%s%d.txt", directory, i);
+        char filename[20]; // Adjust the size as needed
+        snprintf(filename, sizeof(filename), "%s/%d.txt", directory, i);
+        printf("%s\n",filename);
 
         // Open the file for writing
         FILE *file = fopen(filename, "w");
@@ -132,6 +133,5 @@ void getTask(void)
 
     // Append the new task to the taskArray
     taskArray[taskCount] = newTask;
-    printf("%i %s", newTask.time, newTask.active ? "true/n" : "false/n");
     taskCount++;
 }
