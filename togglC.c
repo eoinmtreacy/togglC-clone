@@ -27,14 +27,12 @@ int main()
         getTask();
         writeTasksToFiles(directory, taskArray);
     }
-    
-    
-    
     return 0;
 }
 
     void readTasks(const char* directory, struct Task array[])
     {
+    taskCount = 0;
     DIR *d;
     struct dirent *dir;
     d = opendir(directory);
@@ -74,10 +72,9 @@ int main()
 
 
                                 // Print the task details
-                                printf("Task: %s\n", task.user_input);
-                                printf("Time: %d\n", task.time);
-                                printf("Active: %s\n", task.active ? "true" : "false");
-                                printf("-------------\n");
+                                printf("%s, ", task.user_input);
+                                printf("%d, ", task.time);
+                                printf("%s\n", task.active ? "active" : "inactive");
                             }
                         }
                     }
@@ -91,11 +88,11 @@ int main()
     }
 }
 
-void writeTasksToFiles(const char* directory, struct Task array[]) {
+void writeTasksToFiles(const char* directory, struct Task array[]) 
+{
     for (int i = 0; i < taskCount; i++) {
         char filename[20]; // Adjust the size as needed
         snprintf(filename, sizeof(filename), "%s/%d.txt", directory, i);
-        printf("%s\n",filename);
 
         // Open the file for writing
         FILE *file = fopen(filename, "w");
