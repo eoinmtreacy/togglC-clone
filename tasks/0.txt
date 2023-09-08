@@ -1,3 +1,0 @@
-magic number
-69
-false

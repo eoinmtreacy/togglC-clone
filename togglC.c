@@ -68,13 +68,11 @@ int main()
                                 task.active = (strcmp(activeStr, "true\n") == 0) ? true : false;
 
                                 taskArray[taskCount] = task;
-                                taskCount++;
-
-
-                                // Print the task details
+                                printf("%i: ", taskCount);
                                 printf("%s, ", task.user_input);
                                 printf("%d, ", task.time);
                                 printf("%s\n", task.active ? "active" : "inactive");
+                                taskCount++;
                             }
                         }
                     }
@@ -118,10 +116,6 @@ void getTask(void)
     printf("enter letters to create new tasks, single numbers to activate existing, or exit:\n");
     fgets(input, sizeof(input), stdin); // Read a line of text from the user
 
-    //if (strcmp(input, "q") == 0) {
-    //        break; // Exit the loop if the user types 'exit'
-    //    }
-//
     struct Task newTask;
     strncpy(newTask.user_input, input, sizeof(newTask.user_input) - 1);
     newTask.user_input[sizeof(newTask.user_input) - 1] = '\0'; // Ensure null-terminated string
