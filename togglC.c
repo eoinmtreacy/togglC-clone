@@ -20,7 +20,7 @@ void getTask(char *directory);
 
 int main()
 {
-    const char *directory = "./tasks";
+    char *directory = "./tasks";
     while (1)
     {
         readTasks(directory, taskArray);
@@ -116,10 +116,27 @@ void getTask(char *directory)
     {
         if (strcmp(input, "d\n") == 0)
         {
+            char deleteBuffer[20];
             int delete;
             printf("enter task number to be deleted: ");
             scanf("%d", &delete);
-            printf("task %d succesfully deleted\n", delete);
+            sprintf(deleteBuffer, "%s%d", directory, delete);
+            if(remove(deleteBuffer == 0))
+            {
+                printf("file deleted\n");
+                taskCount--;
+                int j = 0;
+                for (int i = 0; i < taskCount; i++)
+                {
+                    if (i != delete)
+                    {
+                        taskArray[i] = taskArray[i + j];
+                    } else 
+                    {
+                        j++;
+                    }
+                }
+            }
         }
     } else
         {
@@ -128,7 +145,6 @@ void getTask(char *directory)
             newTask.user_input[sizeof(newTask.user_input) - 1] = '\0';
             newTask.time = 0;
             newTask.active = false;
-
             taskArray[taskCount] = newTask;
             taskCount++;
         }
