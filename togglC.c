@@ -16,7 +16,7 @@ int taskCount = 0;
 
 void readTasks(const char* directory, struct Task array[]);
 void writeTasksToFiles(const char* directory, struct Task array[]);
-void getTask(void);
+void getTask(char *directory);
 
 int main()
 {
@@ -24,7 +24,7 @@ int main()
     while (1)
     {
         readTasks(directory, taskArray);
-        getTask();
+        getTask(directory);
         writeTasksToFiles(directory, taskArray);
     }
     return 0;
@@ -105,7 +105,7 @@ void writeTasksToFiles(const char* directory, struct Task array[])
     }
 }
 
-void getTask(void)
+void getTask(char *directory)
 {
     char input[100];
     printf("enter letters to create new tasks, single numbers to activate existing, or exit:\n");
@@ -114,7 +114,13 @@ void getTask(void)
     //handle single letter commands for delete, refresh, activate and edit
     if ((input[1]) == '\n')
     {
-        printf("single char detected\n");
+        if (strcmp(input, "d\n") == 0)
+        {
+            int delete;
+            printf("enter task number to be deleted: ");
+            scanf("%d", &delete);
+            printf("task %d succesfully deleted\n", delete);
+        }
     } else
         {
             struct Task newTask;
