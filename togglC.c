@@ -49,9 +49,9 @@ if (d) {
             if (file != NULL) 
             {
                 struct Task task;
+                memset(task.user_input, '\0', sizeof(task.user_input));
                 // Read task description (first line)
-                if (fgets(task.user_input, sizeof(task.user_input), file) != NULL) 
-                {
+                fgets(task.user_input, sizeof(task.user_input), file);
                     // Remove the newline character from the input
                     if (task.user_input[strlen(task.user_input) - 1] == '\n') 
                     {
@@ -59,23 +59,21 @@ if (d) {
                     }
                     // Read time (second line)
                     char timeStr[100];
-                    if (fgets(timeStr, sizeof(timeStr), file) != NULL) 
-                    {
-                        task.time = atoi(timeStr);
-                        // Read active status (third line)
-                        char activeStr[100];
-                        if (fgets(activeStr, sizeof(activeStr), file) != NULL) 
-                        {
-                            task.active = (strcmp(activeStr, "true\n") == 0) ? true : false;
-                            taskArray[taskCount] = task;
-                            printf("%i: ", taskCount);
-                            printf("%s, ", task.user_input);
-                            printf("%d, ", task.time);
-                            printf("%s\n", task.active ? "active" : "inactive");
-                            taskCount++;
-                        }
-                    }
-                }
+                fgets(timeStr, sizeof(timeStr), file);
+                
+                task.time = atoi(timeStr);
+                // Read active status (third line)
+                char activeStr[100];
+                fgets(activeStr, sizeof(activeStr), file);
+
+                task.active = (strcmp(activeStr, "true\n") == 0) ? true : false;
+                taskArray[taskCount] = task;
+                printf("%i: ", taskCount);
+                printf("%s, ", task.user_input);
+                printf("%d, ", task.time);
+                printf("%s\n", task.active ? "active" : "inactive");
+                taskCount++;
+
                 // Close the file
                 fclose(file);
             }
@@ -142,7 +140,7 @@ void getTask(char *directory)
         {
             struct Task newTask;
             strncpy(newTask.user_input, input, sizeof(newTask.user_input) - 1);
-            newTask.user_input[sizeof(newTask.user_input) - 1] = '\0';
+            newTask.user_input[sizeof(newTask.user_input)] = '\0';
             newTask.time = 0;
             newTask.active = false;
             taskArray[taskCount] = newTask;
