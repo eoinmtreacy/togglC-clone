@@ -16,15 +16,16 @@ int taskCount = 0;
 
 void readTasks(const char* directory, struct Task array[]);
 void writeTasksToFiles(const char* directory, struct Task array[]);
-void getTask(char *directory);
+int getTask(char *directory, int quit);
 
 int main()
 {
     char *directory = "./tasks";
-    while (1)
+    int quit = 0;
+    while (quit == 0)
     {
         readTasks(directory, taskArray);
-        getTask(directory);
+        quit = getTask(directory, quit);
         writeTasksToFiles(directory, taskArray);
     }
     return 0;
@@ -103,13 +104,13 @@ void writeTasksToFiles(const char* directory, struct Task array[])
     }
 }
 
-void getTask(char *directory)
+int getTask(char *directory, int quit)
 {
     char input[100];
-    printf("enter letters to create new tasks, single numbers to activate existing, or exit:\n");
+    printf("enter letters to create new tasks, single numbers to activate existing, or q to quit:\n");
     fgets(input, sizeof(input), stdin);
 
-    //handle single letter commands for delete, refresh, activate and edit
+    //handle single letter commands for delete, refresh, activate and editq
     if ((input[1]) == '\n')
     {
         if (strcmp(input, "d\n") == 0)
@@ -135,6 +136,12 @@ void getTask(char *directory)
                     }
                 }
             }
+            return 0;
+        }
+        if(strcmp(input, "q\n") == 0)
+        {
+            quit = 1;
+            return 1;
         }
     } else
         {
@@ -145,5 +152,6 @@ void getTask(char *directory)
             newTask.active = false;
             taskArray[taskCount] = newTask;
             taskCount++;
+            return 0;
         }
 }
