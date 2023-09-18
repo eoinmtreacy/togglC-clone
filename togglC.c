@@ -119,20 +119,22 @@ int getTask(char *directory, int quit)
             int delete;
             printf("enter task number to be deleted: ");
             scanf("%d", &delete);
-            sprintf(deleteBuffer, "%s%d", directory, delete);
-            if(remove(deleteBuffer == 0))
+            sprintf(deleteBuffer, "%s/%d.txt", directory, delete);
+            printf(deleteBuffer);
+            if(remove(deleteBuffer) == 0)
             {
                 printf("file deleted\n");
                 taskCount--;
                 int j = 0;
                 for (int i = 0; i < taskCount; i++)
                 {
-                    if (i != delete)
+                    if (i + j != delete)
                     {
                         taskArray[i] = taskArray[i + j];
                     } else 
                     {
                         j++;
+                        i--;
                     }
                 }
             }
